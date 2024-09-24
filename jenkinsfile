@@ -1,0 +1,67 @@
+pipeline{
+    agent any
+    environment {
+        WS = "${WORKSPACE}"
+        REGISTRY= "registry.cn-hangzhou.aliyuncs.com"
+        IMAGE_NAME = "registry.cn-hangzhou.aliyuncs.com/senfel/k8s-demo:${env.BUILD_ID}"
+        K8S_NAMESPACE = "default"
+    }
+
+    //定义流水线的加工流程
+    stages {
+        //流水线的所有阶段
+        stage('step1:env check'){
+            steps {
+               sh 'pwd && ls -alh'
+               sh 'printenv'
+               sh 'docker version'
+               sh 'java -version'
+               sh 'git --version'
+            }
+        }
+
+        stage('step2:compile'){
+            agent {
+                docker {
+                    image 'maven:3-alpine'
+                    args '-v maven-repository:/root/.m2'
+                 }
+            }
+            steps {
+               sh 'pwd && ls -alh'
+               sh 'mvn -v'
+               sh 'cd ${WS} && mvn clean package -s "/var/jenkins_home/appconfig/maven/settings.xml" -Dmaven.test.skip=true'
+            }
+        }
+
+        stage('step3:build image'){
+            steps {
+               sh 'pwd && ls -alh'
+               sh 'docker build -t ${IMAGE_NAME} .'
+            }
+        }
+
+       stage('step4:push image'){
+            steps {
+                withCredentials([[$class: 'UsernamePasswordMultiBinding',
+                credentialsId: 'aliyun',
+                usernameVariable: 'REGISTRY_USERNAME',
+                passwordVariable: 'REGISTRY_PASSWORD']]) {
+                sh """
+                    docker login -u ${REGISTRY_USERNAME} -p ${REGISTRY_PASSWORD} ${REGISTRY}
+                    docker push ${IMAGE_NAME}
+                    docker rmi ${IMAGE_NAME}
+                    """
+                }
+            }
+        }
+        stage('step5:deployment'){
+            steps {
+                sh """
+                    sed -i "s#k8s-demo-image#${IMAGE_NAME}#g" deployment.yaml
+                    kubectl apply --kubeconfig=/root/.kube/config -f deployment.yaml --namespace=${K8S_NAMESPACE}
+                    """
+            }
+        }
+    }
+}
