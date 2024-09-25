@@ -5,10 +5,15 @@ pipeline {
             defaultContainer 'jnlp'
         }
     }
+    parameters {
+      gitParameter branchFilter: 'origin/(.*)', defaultValue: 'main', name: 'BRANCH', type: 'PT_BRANCH'
+    }
     stages {
         stage('Clone Repository') {
             steps {
-                git credentialsId: 'github-credentials', url: 'https://github.com/aiaab-wang/jenkins-demo-wang.git'
+                git branch: "${params.BRANCH}", url: 'https://github.com/aiaab-wang/jenkins-demo-wang.git' // 替换为你的仓库地址
+                // git 'https://github.com/aiaab-wang/jenkins-demo-wang.git' // 替换为你的仓库地址
+                // git credentialsId: 'github-credentials', url: 'https://github.com/aiaab-wang/jenkins-demo-wang.git'
             }
         }
         stage('Build Docker Image') {
@@ -32,7 +37,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    sh "kubectl run your-pod --image=${imageName} --restart=Never" // 替换为你的 pod 名称
+                    sh "kubectl run demo-pod --image=${imageName} --restart=Never" // 替换为你的 pod 名称
                 }
             }
         }
