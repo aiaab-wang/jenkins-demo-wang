@@ -14,7 +14,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    def imageName = "your-docker-registry/your-image:${env.BUILD_ID}" // 替换为你的镜像名称
+                    def imageName = "192.168.46.128:8443/alpine:3.14-${env.BUILD_ID}" // 替换为你的镜像名称
                     sh "docker build -t ${imageName} ."
                 }
             }
