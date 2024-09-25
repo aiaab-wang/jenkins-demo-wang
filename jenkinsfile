@@ -9,6 +9,7 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 git 'https://github.com/aiaab-wang/jenkins-demo-wang.git' // 替换为你的仓库地址
+                git credentialsId: 'github-credentials', url: 'https://github.com/aiaab-wang/jenkins-demo-wang.git'
             }
         }
         stage('Build Docker Image') {
