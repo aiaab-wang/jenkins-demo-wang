@@ -17,7 +17,16 @@ pipeline {
                 // git credentialsId: 'github-credentials', url: 'https://github.com/aiaab-wang/jenkins-demo-wang.git'
             }
         }
+        stage('check docker') {
+            steps {
+                script {
+                    sh "echo ${PATH}"
+                }
+            }
+        }
+
         stage('Build Docker Image') {
+
             steps {
                 script {
                     def imageName = "192.168.46.167:8443/alpine:3.14-${env.BUILD_ID}" // 替换为你的镜像名称
