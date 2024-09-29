@@ -6,22 +6,12 @@ pipeline {
             inheritFrom 'jenkins-pod-template'
         }
     }
-    parameters {
-      gitParameter branchFilter: 'origin/(.*)', defaultValue: 'main', name: 'BRANCH', type: 'PT_BRANCH'
-    }
     stages {
-        stage('Clone Repository') {
-            steps {
-                git branch: "${params.BRANCH}", url: 'https://github.com/aiaab-wang/jenkins-demo-wang.git' // 替换为你的仓库地址
-                // git 'https://github.com/aiaab-wang/jenkins-demo-wang.git' // 替换为你的仓库地址
-                // git credentialsId: 'github-credentials', url: 'https://github.com/aiaab-wang/jenkins-demo-wang.git'
-            }
-        }
         stage('Build Docker Image') {
             steps {
                 script {
                     def imageName = "192.168.46.167:8443/alpine:3.14-${env.BUILD_ID}" // 替换为你的镜像名称
-                    sh "docker build -t ${imageName} ."
+                    sh "echo 'FROM 192.168.46.128:8443/alpine:3.14' > Dockerfile && docker build -t ${imageName} ."
                 }
             }
         }
