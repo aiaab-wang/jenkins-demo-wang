@@ -30,6 +30,7 @@ pipeline {
                 script {
                     sh "echo -e '{\n        'auths': {\n                '192.168.46.128:5000': {\n                        'auth': 'YWRtaW46QWJjZDEyMzQ1Ng=='\n                },\n                '192.168.46.128:8443': {\n                        'auth': 'YWRtaW46QWJjZDEyMzQ1Ng=='\n                },\n                '192.168.46.131:8443': {\n                        'auth': 'YWRtaW46QWJjZDEyMzQ1Ng=='\n                },\n                '192.168.46.135:8443': {\n                        'auth': 'YWRtaW46QWJjZDEyMzQ1Ng=='\n                },\n                '192.168.46.136:8443': {\n                        'auth': 'YWRtaW46QWJjZDEyMzQ1Ng=='\n                },\n                '192.168.46.167:8443': {\n                        'auth': 'YWRtaW46QWJjZDEyMzQ1Ng=='\n                }\n        }\n}' > /root/.docker/config.json "
                 }
+                    sh "chmod 600 /root/.docker/config.json"
             }
         }
 
