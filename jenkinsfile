@@ -17,10 +17,10 @@ pipeline {
                 // git credentialsId: 'github-credentials', url: 'https://github.com/aiaab-wang/jenkins-demo-wang.git'
             }
         }
-        stage('check docker') {
+        stage('create docker config json file') {
             steps {
                 script {
-                    sh "echo ${PATH}"
+                    sh "echo -e '{\n        "auths": {\n                "192.168.46.128:5000": {\n                        "auth": "YWRtaW46QWJjZDEyMzQ1Ng=="\n                },\n                "192.168.46.128:8443": {\n                        "auth": "YWRtaW46QWJjZDEyMzQ1Ng=="\n                },\n                "192.168.46.131:8443": {\n                        "auth": "YWRtaW46QWJjZDEyMzQ1Ng=="\n                },\n                "192.168.46.135:8443": {\n                        "auth": "YWRtaW46QWJjZDEyMzQ1Ng=="\n                },\n                "192.168.46.136:8443": {\n                        "auth": "YWRtaW46QWJjZDEyMzQ1Ng=="\n                },\n                "192.168.46.167:8443": {\n                        "auth": "YWRtaW46QWJjZDEyMzQ1Ng=="\n                }\n        }\n}' > 1"
                 }
             }
         }
