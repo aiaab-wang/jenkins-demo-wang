@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: demo
+  namespace: jenkins-slave-ns
+spec:
+  imagePullSecrets:
+  - name: registry-basic-auth
+  containers:
+  - name: demo
+    image: 192.168.46.167:8443/alpine:3.14-89
+    command: ["/bin/sh","-c","sleep 9999999"]
