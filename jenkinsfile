@@ -17,6 +17,14 @@ pipeline {
                 // git credentialsId: 'github-credentials', url: 'https://github.com/aiaab-wang/jenkins-demo-wang.git'
             }
         }
+        stage('create docker config json dir') {
+            steps {
+                script {
+                    sh "mkdir -p /root/.docker/"
+                }
+            }
+        }
+
         stage('create docker config json file') {
             steps {
                 script {
