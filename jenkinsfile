@@ -49,6 +49,8 @@ pipeline {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'docker-credentials', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
                         sh 'echo $DOCKER_PASSWORD | docker login 192.168.46.167:8443 -u $DOCKER_USERNAME --password-stdin' // 替换为你的 Docker Registry
+                        sh "docker images"
+                        sh "echo ${imageName}"
                         sh "docker push ${imageName}"
                     }
                 }
