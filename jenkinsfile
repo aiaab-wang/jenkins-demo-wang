@@ -36,11 +36,26 @@ pipeline {
         }
 
         stage('Build Docker Image') {
-
             steps {
                 script {
                     def imageName = "192.168.46.167:8443/alpine:3.14-${env.BUILD_ID}" // 替换为你的镜像名称
                     sh "docker build -t ${imageName} ."
+                }
+            }
+        }
+        stage('Get Twistcli') {
+            steps {
+                script {
+                    sh "curl -k -X GET -o ./twistcli -H 'Authorization: Basic YWRtaW46QWJjZDEyMzQ1Ng==' 'https://192.168.46.167:8083/api/v1/util/twistcli'"
+                    sh "chmod +x ./twistcli"
+                }
+            }
+        }
+        stage('use Twistcli scan image') {
+            steps {
+                script {
+                    def imageName = "192.168.46.167:8443/alpine:3.14-${env.BUILD_ID}" // 替换为你的镜像名称
+                    sh "./twistcli images scan -u admin -p Abcd123456 --address https://192.168.46.167:8083 --output-file scan-result.json ${imageName}"
                 }
             }
         }
