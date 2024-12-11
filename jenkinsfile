@@ -57,6 +57,8 @@ pipeline {
                 script {
                     def imageName = "192.168.46.167:8443/alpine:3.14-${env.BUILD_ID}" // 替换为你的镜像名称
                     sh "docker info | grep -i cgroup"
+                    sh "chown -R root:docker /var/lib/docker"
+                    sh "chmod -R 755 /var/lib/docker"
                     sh "ls -al /var/lib/docker"
                     sh "./twistcli images scan -u admin -p Abcd123456 --address https://192.168.46.167:8083 --output-file scan-result.json --details ${imageName}"
                 }
