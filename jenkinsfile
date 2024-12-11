@@ -46,7 +46,6 @@ pipeline {
         stage('Get Twistcli') {
             steps {
                 script {
-                    sh "apk add curl"
                     sh "curl -k -X GET -o ./twistcli -H 'Authorization: Basic YWRtaW46QWJjZDEyMzQ1Ng==' 'https://192.168.46.167:8083/api/v1/util/twistcli'"
                     sh "chmod +x ./twistcli"
                 }
